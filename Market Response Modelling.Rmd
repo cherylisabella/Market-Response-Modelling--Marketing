@@ -46,7 +46,7 @@ The variables and their descriptions are shown below:
 
 # Categorisation
 
-We commence by categorising all variables in the form of a market
+The first approach is to categorise all variables in the form of a market
 response framework. ![](market%20response%20framework.png)
 
 # Linear regression analysis
@@ -183,8 +183,7 @@ rmsemrm <- rmse(trainmrm$acquisition_n, testmrm$acquisition_n)
 ![](mrm%20coefficients.png)
 
 **Results:** Since the p-value of the t-statistic for all explanatory
-variables are much larger than the 5% significance level, we do not have
-enough evidence to reject the null hypothesis, meaning that the means of
+variables are much larger than the 5% significance level, there is not enough evidence to reject the null hypothesis, meaning that the means of
 explanatory variables in the Training and Test sets are similar.
 
 <br>
