@@ -1,0 +1,13 @@
+name: "Market Response Modelling"
+output_dir: "docs"
+output:
+    html_document:
+      theme: cosmo
+navbar:
+    title: "Market Response Modelling"
+    left:
+    - text: "Home"
+      href: index.html
+    - text: "Market Response Modelling"
+      href: STP.html
+
