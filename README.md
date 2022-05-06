@@ -23,6 +23,7 @@ The variables and their descriptions are shown below:
 # Categorisation
 The first approach is to categorise all variables in the form of a market response framework. 
 
+
 ![](market%20response%20framework.png)
 
 # Linear Regression Analysis
