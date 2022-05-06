@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Cheryl Isabella" />
+
+
+<title>Market Response Modelling</title>
+
+<script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+<script src="site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Market Response Modelling</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="STP.html">Market Response Modelling</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore"><strong>Market Response
+Modelling</strong></h1>
+<h4 class="author">Cheryl Isabella</h4>
+
+</div>
+
+
+<div id="data" class="section level1">
+<h1>Data</h1>
+<p>This project will analyse how effective the current channels are in
+acquiring new customers. Therefore, the following data were
+collected:</p>
+<ul>
+<li>number of newly acquired customers across 118 weeks</li>
+<li>the investment in traditional advertising</li>
+<li>the number of impressions of Facebook posts initiated by the
+telecommunications provider</li>
+<li>information about media and buzz events, holiday periods,
+promotions</li>
+<li>marketing buzz about the telecommunications provider on
+Twitter.</li>
+</ul>
+<p>The variables and their descriptions are shown below:</p>
+<p><img src="mrm%20variables.png" /></p>
+</div>
+<div id="categorisation" class="section level1">
+<h1>Categorisation</h1>
+<p>We commence by categorising all variables in the form of a market
+response framework. <img src="market%20response%20framework.png" /></p>
+</div>
+<div id="linear-regression-analysis" class="section level1">
+<h1>Linear regression analysis</h1>
+<p>The data has been cleaned prior to its upload into R. Therefore, we
+can proceed with a linear regression analysis on the data.</p>
+<pre class="r"><code>#normalise function
+normalize &lt;- function(x) {
+  return((x-min(x))/ (max(x)-min(x)))
+}
+
+mrm1 = mrm %&gt;% mutate(
+  acquisition_n = normalize(acquisition),
+  promotions_n = normalize(promotions),
+  lag_traditional.advertising_n = normalize(lag_traditional.advertising),
+  lag_Twitter_valence_n = normalize(lag_Twitter_valence),
+  lag_Twitter_volume_n = normalize(lag_Twitter_volume),
+  lag_FB_impressions_n = normalize(lag_FB_impressions)
+)
+
+model = lm(acquisition_n ~ buzz.event + media.event + holidays + promotions_n + lag_traditional.advertising_n + lag_Twitter_valence_n + lag_Twitter_volume_n + lag_FB_impressions_n, mrm1)
+summary(model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = acquisition_n ~ buzz.event + media.event + holidays + 
+##     promotions_n + lag_traditional.advertising_n + lag_Twitter_valence_n + 
+##     lag_Twitter_volume_n + lag_FB_impressions_n, data = mrm1)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.32888 -0.10356 -0.01784  0.10310  0.51593 
+## 
+## Coefficients:
+##                                Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)                    0.068409   0.054156   1.263 0.209219    
+## buzz.event                     0.005015   0.101408   0.049 0.960645    
+## media.event                    0.144434   0.041402   3.489 0.000702 ***
+## holidays                       0.060637   0.039139   1.549 0.124212    
+## promotions_n                   0.275896   0.072476   3.807 0.000233 ***
+## lag_traditional.advertising_n  0.296964   0.065331   4.546 1.43e-05 ***
+## lag_Twitter_valence_n          0.303281   0.096155   3.154 0.002081 ** 
+## lag_Twitter_volume_n          -0.201797   0.070405  -2.866 0.004986 ** 
+## lag_FB_impressions_n           0.084160   0.122632   0.686 0.493995    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1702 on 109 degrees of freedom
+## Multiple R-squared:  0.4277, Adjusted R-squared:  0.3857 
+## F-statistic: 10.18 on 8 and 109 DF,  p-value: 1.565e-10</code></pre>
+<div id="regression-model-performance" class="section level2">
+<h2>Regression model performance</h2>
+<p>The performance of the linear regression model will be evaluated in 3
+ways:</p>
+<ol style="list-style-type: decimal">
+<li>Model Assumptions</li>
+<li>Model fit</li>
+<li>Significance of coefficients (via T-tests)</li>
+</ol>
+<div id="model-assumptions" class="section level3">
+<h3>Model Assumptions</h3>
+<p>Diagnostic plots:</p>
+<pre class="r"><code>par(mfrow = c(2, 2))
+plot(model)</code></pre>
+<p><img src="Market-Response-Modelling_files/figure-html/model%20assumptions-1.png" width="576" /></p>
+<p><strong>Results:</strong></p>
+<ol style="list-style-type: decimal">
+<li>Linearity of the data: A linear relationship between the predictors
+and outcome variables can be assumed as the Residuals vs Fitted plot
+shows no fitted pattern, and the red line is approximately horizontal at
+zero.</li>
+<li>Homoscedasticity: residuals can be assumed to have a constant
+variance since the residuals in the Scale-Location plot are spread
+rather equally along the ranges of predictors.</li>
+<li>Independence: can be assumed between and within the customers since
+each customer is a unique individual (ratings by an individual customer
+are not expected to be dependent on ratings by other customer(s)).</li>
+<li>Normality: can be assumed since the normal probability plot of
+residuals approximately follow a straight line.</li>
+<li>Metric scale: all variables are on the metric scale.</li>
+</ol>
+</div>
+<div id="model-fit" class="section level3">
+<h3>Model Fit</h3>
+<ul>
+<li>The adjusted R-Squared is only 0.3857 meaning that only
+approximately 38.6% of the variance of the dependent variable is
+explained by the model ⇒ This suggests that this model is not a good
+fit.</li>
+<li>The p-value associated to the F-statistic is &lt; 0.05 ⇒ this means
+at least 1 independent variable is significantly related to
+Acquisition.</li>
+<li>The F-statistic of 10.18 is relatively small given the size of our
+data.</li>
+<li>The model has an RSME of 0.314 which is relatively good as there is
+little variation in the spread of data.</li>
+</ul>
+</div>
+<div id="significance-of-coefficients-via-t-tests"
+class="section level3">
+<h3>Significance of coefficients (via T-tests)</h3>
+<ul>
+<li>Before evaluating the significance of coefficients, I did a two-fold
+cross validation and split the dataset into a training subgroup with 88
+observations and a test set with 30 observations.</li>
+<li>The two-sample T-test for difference in means was used to validate
+the partitions as the dataset is entirely numerical.</li>
+</ul>
+<p>H0: The means between test and training sets are the same</p>
+<p>HA: The means between test and training sets are different</p>
+<pre class="r"><code>#Two fold cross-validation
+split &lt;- round(nrow(mrm1)*0.75)
+split</code></pre>
+<pre><code>## [1] 88</code></pre>
+<pre class="r"><code>nrow(mrm1) - split</code></pre>
+<pre><code>## [1] 30</code></pre>
+<pre class="r"><code>set.seed(1)
+#Function for two-sample t-test
+ttest &lt;- function(training, testing) {
+  x1_mean &lt;- mean(testing)
+  x2_mean &lt;- mean(training)
+  s1 &lt;- sd(testing)
+  s2 &lt;- sd(training)
+  n1 &lt;- length(testing)
+  n2 &lt;- length(training)
+  dfs &lt;- min(n1-1, n2-1)
+  tdata &lt;- (x1_mean - x2_mean) / sqrt((s1^2/n1)+(s2^2/n2))
+  tdata
+  pvalue &lt;- 2*pt(abs(tdata), df = dfs, lower.tail = FALSE)
+  return(pvalue)
+}
+
+trainindex &lt;- createDataPartition(mrm1$acquisition_n, p = .75, 
+                                  list = FALSE, 
+                                  times = 1)
+trainmrm &lt;- mrm1[trainindex,]
+testmrm  &lt;- mrm1[-trainindex,]</code></pre>
+<p>Derivation of coefficients can be found in the associated .rmd
+file</p>
+<p><img src="mrm%20coefficients.png" /></p>
+<p><strong>Results:</strong> Since the p-value of the t-statistic for
+all explanatory variables are much larger than the 5% significance
+level, we do not have enough evidence to reject the null hypothesis,
+meaning that the means of explanatory variables in the Training and Test
+sets are similar.</p>
+<p><br></p>
+</div>
+</div>
+</div>
+<div id="dynamic-effects" class="section level1">
+<h1>Dynamic effects</h1>
+<ul>
+<li>The effort put into marketing sometimes influences sales in future
+periods. This is known as the carryover effect.</li>
+<li>One type of carryover effect is the delayed-response effect. Some of
+the variables (e.g., traditional advertising and Twitter volume) are
+delayed by one week. This has been done to account for the delayed
+effect this action might have on acquisition.</li>
+<li>This model takes into account some dynamic effects that are relevant
+to this case.</li>
+<li>However, the inclusion of information from past observations of a
+series does not necessarily include other omitted variables that may
+explain some of the historical variations, and that may lead to more
+accurate forecasts.</li>
+</ul>
+</div>
+<div id="influence-of-traditional-advertising-on-acquisition"
+class="section level1">
+<h1>Influence of traditional advertising on acquisition</h1>
+<ul>
+<li>The coefficient for traditional advertising is 0.297 (3sf). This
+means that traditional advertising and acquiring new customers are
+positively correlated.</li>
+<li>That is, when traditional gross media expenditures increase, the
+number of newly acquired customers is likely to increase.</li>
+<li>Note: 0.297 is a proportional effect.</li>
+</ul>
+</div>
+<div id="influence-of-fb-impressions-on-acquisition"
+class="section level1">
+<h1>Influence of FB impressions on acquisition</h1>
+<ul>
+<li>The coefficient for Facebook impressions is 0.084, which indicates
+that like traditional advertising, Facebook impressions and acquiring
+new customers are positively correlated, albeit to a relatively smaller
+extent.</li>
+<li>This means that increasing number of impressions on Facebook will
+likely lead to increase in the number of newly acquired customers.</li>
+</ul>
+</div>
+<div id="conclusion" class="section level1">
+<h1>Conclusion</h1>
+<p>Most effective communication channel (traditional advertising,
+Facebook, Twitter) in stimulating customer acquisition:</p>
+<p><img src="mrm%20conclusion.png" /></p>
+<p><strong>Results:</strong></p>
+<ul>
+<li>The model indicated that the most effective communication channel is
+Twitter as it has the highest coefficient.</li>
+<li>The difference between the most effective and second most effective
+communication channel - traditional advertising - is relatively small.
+However, the difference between Facebook, which turns out to be least
+effective, and traditional advertising is fairly large.</li>
+<li>The influence of Twitter is more than three times as large as the
+influence of Facebook impressions. This insight is useful for the
+company to decide on how to divide their resources.</li>
+<li>It is surprising that traditional advertising is remains impactful
+in this day and age.<br />
+</li>
+<li>It can be concluded that digital advertisings’ impact is higher when
+coupled with traditional advertising, because they need the credibility
+traditional advertising provides.</li>
+</ul>
+<p><strong>Recommendations for telecommunication provider</strong></p>
+<ul>
+<li>As seen from the quantitative evaluation of coefficients, the use of
+more modern advertising, notably Twitter, is recommended for the
+telecommunication provider . This “digital first” approach would be a
+more holistic marketing communication campaign as it meet the changing
+consumer landscape of tech savvy consumers.</li>
+<li>Further, the telecommunication provider could consider reaching
+prospective consumers through personal communication channels (eg
+face-to-face pitches) and buzz marketing to capitalise on word-of-mouth
+influence for higher acquisition and profits.</li>
+<li>Lastly, the firm should also evaluate the return on advertising
+investment through the sales and profits effects. This can be done by
+comparing past sales and profits with past advertising expenditures, or
+through experiments(eg varying the amount it spends on advertising in
+different market areas and measuring the differences in the resulting
+sales/acquisition and profit levels.</li>
+</ul>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
