@@ -377,6 +377,12 @@ src="market%20response%20framework.png" /></p>
 <h1>Linear regression analysis</h1>
 <p>The data has been cleaned prior to its upload into R. Therefore, we
 can proceed with a linear regression analysis on the data.</p>
+<ul>
+<li>All of the variables are numeric.</li>
+<li>Since all of the variables have different ranges, the min-max
+standardisation is used so that each variable’s values are between 0 and
+1.</li>
+</ul>
 <pre class="r"><code>#normalise function
 normalize &lt;- function(x) {
   return((x-min(x))/ (max(x)-min(x)))
