@@ -18,12 +18,13 @@ This project will analyse how effective the current channels are in acquiring ne
 - marketing buzz about the telecommunications provider on Twitter.
 
 The variables and their descriptions are shown below:
+
 ![](mrm%20variables.png)
 
 # Categorisation
 The first approach is to categorise all variables in the form of a market response framework. 
 
-   ![](market%20response%20framework.png)
+![](market%20response%20framework.png)
 
 # Linear Regression Analysis
 The data has been cleaned prior to its upload into R. Therefore, we can
