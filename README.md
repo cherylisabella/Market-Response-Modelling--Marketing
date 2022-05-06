@@ -1,5 +1,6 @@
 # Market Response Modelling--Marketing
-Marketing and business analytics;   Market Response Modeling for a telecommunication provider 
+Marketing and business analytics;   Market Response Modeling for a telecommunication provider.
+
 Github page link: https://cherylisabella.github.io/Market-Response-Modelling--Marketing/
 
 
